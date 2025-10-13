@@ -164,9 +164,9 @@ const Hero: React.FC<HeroProps> = ({ onProjectClick }) => (
 				<span className="blink-cursor">_</span>
 			</p>
 			<h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-4 leading-tight">
-				Hello, I&apos;m
+				Hello, I&apos;m 
 				<span className="text-green-400 transition duration-500 hover:text-green-300">
-					{userProfile.name}
+					{" "+userProfile.name}
 				</span>
 			</h1>
 			<h2 className="text-2xl sm:text-3xl font-light text-gray-300 mb-6">
