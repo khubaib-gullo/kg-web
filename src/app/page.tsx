@@ -1,103 +1,575 @@
-import Image from "next/image";
+"use client";
+import React, { useState, useMemo } from "react";
+import dynamic from "next/dynamic";
 
-export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+import {
+	Home,
+	Code,
+	Mail,
+	GitBranch,
+	Terminal,
+	ExternalLink,
+	Linkedin,
+	Rss,
+	Github,
+	Calendar,
+	ChevronLeft,
+} from "lucide-react";
+import { Post, PostMetadata } from "@/utils/blog-types";
+import blogPostsMetadata from "@/data/blog-metadata";
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+const userProfile = {
+	name: "Muhammad Khubaib",
+	title: "Full Stack Developer & AI Enthusiast",
+	bio: "Crafting robust and scalable software solutions with a focus on modern web technologies and machine learning integration. I thrive on turning complex problems into elegant, high-performance applications.",
+	email: "khubaibgullo377@gmail.com",
+	linkedin: "https://www.linkedin.com/in/khubaibgullo",
+	github: "https://github.com/khubaib-gullo/khubaib-gullo",
+};
+
+const skills = [
+	{ name: "React / Next.js", icon: "react", level: "Expert" },
+	{ name: "Node.js / Express", icon: "node", level: "Expert" },
+	{ name: "TypeScript", icon: "ts", level: "Advanced" },
+	{ name: "Python / Django", icon: "python", level: "Advanced" },
+	{ name: "Tailwind CSS", icon: "css", level: "Expert" },
+	{ name: "Firebase / MongoDB", icon: "db", level: "Intermediate" },
+	{ name: "LLMs / Generative AI", icon: "ai", level: "Advanced" },
+	{ name: "Docker / K8s", icon: "devops", level: "Intermediate" },
+];
+
+const projects = [
+	{
+		title: "Quantum Ledger DApp",
+		description:
+			"A decentralized application for immutable asset tracking built on a custom blockchain fork. Features real-time data sync and multi-sig authentication.",
+		technologies: ["Next.js", "Solidity", "TypeScript", "Web3.js"],
+		link: "https://github.com/alexvesper/quantum-ledger",
+	},
+	{
+		title: "Neural Style Transfer API",
+		description:
+			"A Python-based REST API utilizing TensorFlow for real-time artistic style transfer on user-uploaded images.",
+		technologies: ["Python", "TensorFlow", "Flask", "Docker"],
+		link: "https://github.com/alexvesper/neural-transfer-api",
+	},
+	{
+		title: "Personal Portfolio (V3)",
+		description:
+			"The third iteration of my personal site, designed with a custom CLI-inspired theme for maximum developer appeal and minimal loading time.",
+		technologies: ["React", "Tailwind CSS", "Vite", "JS"],
+		link: "https://github.com/alexvesper/personal-portfolio-v3",
+	},
+];
+
+const blogPosts = blogPostsMetadata;
+
+interface GlowingButtonProps {
+	children: React.ReactNode;
+	onClick?: () => void;
+	active?: boolean;
+	icon?: React.ElementType;
+	className?: string;
+	type?: "button" | "submit" | "reset";
+	disabled?: boolean;
 }
+
+const GlowingButton: React.FC<GlowingButtonProps> = ({
+	children,
+	onClick,
+	active = false,
+	icon: Icon,
+	className = "",
+	type = "button",
+	disabled = false,
+}) => (
+	<button
+		type={type}
+		onClick={onClick}
+		disabled={disabled}
+		className={`
+      flex items-center justify-center space-x-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300
+      bg-gray-800 border ${
+				active
+					? "border-green-400 text-green-400 shadow-green"
+					: "border-gray-700 text-gray-300 hover:border-green-500 hover:text-green-500"
+			}
+      shadow-md ${
+				active
+					? "shadow-[0_0_10px_rgba(52,211,153,0.5)]"
+					: "hover:shadow-[0_0_5px_rgba(52,211,153,0.2)]"
+			}
+      focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 ${className}
+      ${disabled ? "opacity-50 cursor-not-allowed" : ""}
+    `}
+	>
+		{Icon && <Icon size={18} />}
+		<span>{children}</span>
+	</button>
+);
+
+type PageKey = "home" | "projects" | "blog" | "contact";
+
+interface HeaderProps {
+	currentPage: PageKey;
+	setCurrentPage: (page: PageKey) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
+	const navItems = [
+		{ name: "Home", key: "home", icon: Home },
+		{ name: "Projects", key: "projects", icon: Code },
+		{ name: "Blog", key: "blog", icon: Rss },
+		{ name: "Contact", key: "contact", icon: Mail },
+	];
+
+	return (
+		<header className="fixed top-0 left-0 w-full z-10 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+				<div className="flex items-center space-x-2 text-xl font-mono text-green-400 tracking-wider">
+					<Terminal className="text-green-500" size={24} />
+					<span>{userProfile.name}</span>
+				</div>
+				<nav className="flex space-x-3 sm:space-x-4">
+					{navItems.map((item) => (
+						<GlowingButton
+							key={item.key}
+							onClick={() => setCurrentPage(item.key as PageKey)}
+							active={currentPage === item.key}
+							icon={item.icon}
+							className="hidden sm:flex"
+						>
+							{item.name}
+						</GlowingButton>
+					))}
+					<div className="sm:hidden">
+						{/* Simple mobile menu button for small screens */}
+						<GlowingButton icon={Rss}>Menu</GlowingButton>
+					</div>
+				</nav>
+			</div>
+		</header>
+	);
+};
+
+interface HeroProps {
+	onProjectClick: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onProjectClick }) => (
+	<section className="min-h-screen pt-28 pb-12 flex flex-col items-center justify-center text-center px-4">
+		<div className="max-w-4xl w-full">
+			<p className="text-sm font-mono text-green-400 mb-2 animate-pulse">
+				{"> Initializing profile_data..."}
+				<span className="blink-cursor">_</span>
+			</p>
+			<h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-4 leading-tight">
+				Hello, I&apos;m
+				<span className="text-green-400 transition duration-500 hover:text-green-300">
+					{userProfile.name}
+				</span>
+			</h1>
+			<h2 className="text-2xl sm:text-3xl font-light text-gray-300 mb-6">
+				A{" "}
+				<span className="font-semibold text-cyan-400">{userProfile.title}</span>
+			</h2>
+			<p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
+				{userProfile.bio}
+			</p>
+			<div className="flex flex-wrap justify-center gap-4">
+				<GlowingButton
+					onClick={onProjectClick}
+					icon={Code}
+					className="text-lg px-6 py-3"
+				>
+					View Projects
+				</GlowingButton>
+				<a
+					href={userProfile.linkedin}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<GlowingButton icon={Linkedin} className="text-lg px-6 py-3">
+						LinkedIn
+					</GlowingButton>
+				</a>
+				<a href={userProfile.github} target="_blank" rel="noopener noreferrer">
+					<GlowingButton icon={Github} className="text-lg px-6 py-3">
+						Github
+					</GlowingButton>
+				</a>
+				<a href={`mailto:${userProfile.email}`}>
+					<GlowingButton icon={Mail} className="text-lg px-6 py-3">
+						Gmail
+					</GlowingButton>
+				</a>
+			</div>
+		</div>
+	</section>
+);
+
+const SkillsSection: React.FC = () => (
+	<section className="py-16 px-4 bg-gray-950 border-t border-gray-800">
+		<div className="max-w-7xl mx-auto">
+			<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1"></h3>
+			<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+				{skills.map((skill, index) => (
+					<div
+						key={index}
+						className="p-5 bg-gray-900 rounded-xl border border-gray-800 hover:border-green-600 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-green-900/50"
+					>
+						<div className="flex items-center space-x-3 mb-2">
+							<span className="text-green-400 text-2xl">
+								<Code size={24} />
+							</span>
+							<h4 className="text-xl font-semibold text-white">{skill.name}</h4>
+						</div>
+						<p className="text-sm text-gray-500 uppercase tracking-widest">
+							{skill.level}
+						</p>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+);
+
+const ProjectsList: React.FC = () => (
+	<section className="py-16 px-4">
+		<div className="max-w-7xl mx-auto">
+			<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1"></h3>
+			<div className="space-y-12">
+				{projects.map((project, index) => (
+					<div
+						key={index}
+						className="bg-gray-900 p-6 sm:p-8 rounded-xl border border-gray-800 flex flex-col md:flex-row shadow-xl"
+					>
+						<div className="md:w-3/4">
+							<h4 className="text-2xl font-bold text-green-400 mb-2 flex items-center">
+								<GitBranch className="mr-3" size={24} />
+								{project.title}
+							</h4>
+							<p className="text-gray-400 mb-4">{project.description}</p>
+							<div className="flex flex-wrap gap-2 mb-4">
+								{project.technologies.map((tech, i) => (
+									<span
+										key={i}
+										className="px-3 py-1 text-xs font-mono bg-gray-800 text-cyan-400 rounded-full border border-cyan-500/30"
+									>
+										{tech}
+									</span>
+								))}
+							</div>
+						</div>
+						<div className="md:w-1/4 flex md:flex-col justify-end items-start md:items-end mt-4 md:mt-0">
+							<a
+								href={project.link}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="self-start md:self-end"
+							>
+								<GlowingButton
+									icon={ExternalLink}
+									className="text-sm px-4 py-2"
+								>
+									View Source
+								</GlowingButton>
+							</a>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+);
+
+const BlogSection: React.FC<{ onSelectPost: (post: Post) => void }> = ({
+	onSelectPost,
+}) => (
+	<section className="py-16 px-4">
+		<div className="max-w-3xl mx-auto">
+			<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1"></h3>
+			<div className="space-y-6">
+				{blogPosts.map((post) => (
+					<div
+						key={post.id}
+						className="bg-gray-900 p-6 rounded-xl border border-gray-800 hover:border-green-600 transition duration-300 cursor-pointer shadow-lg hover:shadow-green-900/50"
+						onClick={() => onSelectPost(post)}
+					>
+						<h4 className="text-xl font-bold text-green-400 mb-2">
+							{post.title}
+						</h4>
+						<div className="flex items-center text-sm text-gray-500 mb-3">
+							<Calendar size={16} className="mr-2" />
+							<span>{post.date}</span>
+						</div>
+						<p className="text-gray-400 mb-3">{post.excerpt}</p>
+						<span className="text-cyan-400 font-mono text-sm inline-flex items-center">
+							[read more <ExternalLink size={14} className="ml-1" />]
+						</span>
+					</div>
+				))}
+			</div>
+		</div>
+	</section>
+);
+
+const BlogPostDetail: React.FC<{ post: Post; onBack: () => void }> = ({
+	post,
+	onBack,
+}) => {
+	const MDXContent = useMemo(() => {
+		return dynamic(() => import(`@/app/blog/${post.slug}.mdx`), {
+			loading: () => (
+				<p className="text-green-500 font-mono">Loading post content...</p>
+			),
+		});
+	}, [post.slug]);
+
+	return (
+		<section className="py-16 px-4">
+			<div className="max-w-3xl mx-auto">
+				<GlowingButton onClick={onBack} icon={ChevronLeft} className="mb-8">
+					Back to Blog List
+				</GlowingButton>
+
+				<article className="bg-gray-900 p-6 sm:p-8 rounded-xl border border-green-800 shadow-2xl">
+					<h1 className="text-4xl sm:text-5xl font-extrabold text-green-400 mb-4">
+						{post.title}
+					</h1>
+					<div className="flex items-center text-md text-gray-500 mb-6 border-b border-gray-700 pb-4">
+						<Calendar size={18} className="mr-2" />
+						<span>Published on {post.date}</span>
+					</div>
+
+					<div className="prose prose-invert max-w-none">
+						{/* 2. Render the dynamically loaded MDX component */}
+						<MDXContent />
+					</div>
+				</article>
+			</div>
+		</section>
+	);
+};
+
+const ContactSection: React.FC = () => {
+	const [formData, setFormData] = useState({
+		name: "",
+		email: "",
+		message: "",
+	});
+	const [status, setStatus] = useState<"sending" | "sent" | "error" | null>(
+		null
+	);
+
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+		if (status) setStatus(null);
+	};
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		setStatus("sending");
+		setTimeout(() => {
+			console.log("Simulated Contact Form Submission:", formData);
+			setStatus("sent");
+		}, 2000);
+	};
+
+	return (
+		<section className="py-16 px-4 bg-gray-950 border-t border-gray-800">
+			<div className="max-w-3xl mx-auto">
+				<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1"></h3>
+				<p className="text-gray-400 text-center mb-8">
+					Have a project idea or a question? Send me a message directly or
+					connect via social platforms.
+				</p>
+				<div className="flex justify-center space-x-6 mt-10 mb-10">
+					<a
+						href={`mailto:${userProfile.email}`}
+						className="text-gray-400 hover:text-green-400 transition"
+						aria-label="Email"
+					>
+						khubaibgullo377@gmail.com
+					</a>
+					<a
+						href={userProfile.linkedin}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="text-gray-400 hover:text-green-400 transition"
+						aria-label="LinkedIn"
+					>
+						<Linkedin size={32} />
+					</a>
+					<a
+						href={userProfile.github}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="text-gray-400 hover:text-green-400 transition "
+						aria-label="GitHub"
+					>
+						<GitBranch size={32} />
+					</a>
+				</div>
+
+				<form
+					onSubmit={handleSubmit}
+					className="space-y-6 p-6 bg-gray-900 rounded-xl border border-gray-800 shadow-2xl"
+				>
+					<div>
+						<label
+							htmlFor="name"
+							className="block text-sm font-medium text-gray-300 mb-2"
+						>
+							Name
+						</label>
+						<input
+							type="text"
+							id="name"
+							name="name"
+							value={formData.name}
+							onChange={handleChange}
+							required
+							className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-green-500 focus:border-green-500 transition duration-200"
+							placeholder="Your Name"
+						/>
+					</div>
+					<div>
+						<label
+							htmlFor="email"
+							className="block text-sm font-medium text-gray-300 mb-2"
+						>
+							Email
+						</label>
+						<input
+							type="email"
+							id="email"
+							name="email"
+							value={formData.email}
+							onChange={handleChange}
+							required
+							className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-green-500 focus:border-green-500 transition duration-200"
+							placeholder="your.email@example.com"
+						/>
+					</div>
+					<div>
+						<label
+							htmlFor="message"
+							className="block text-sm font-medium text-gray-300 mb-2"
+						>
+							Message
+						</label>
+						<textarea
+							id="message"
+							name="message"
+							rows={4}
+							value={formData.message}
+							onChange={handleChange}
+							required
+							className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:ring-green-500 focus:border-green-500 transition duration-200"
+							placeholder="Your message here..."
+						></textarea>
+					</div>
+					<div className="flex flex-col sm:flex-row items-center justify-between pt-2">
+						<GlowingButton
+							type="submit"
+							disabled={status === "sending"}
+							className="w-full sm:w-auto"
+						>
+							{status === "sending" ? "SENDING..." : "SEND MESSAGE"}
+						</GlowingButton>
+						{status === "sent" && (
+							<p className="text-green-500 mt-3 sm:mt-0 font-mono">
+								Message Sent Successfully!
+							</p>
+						)}
+						{status === "error" && (
+							<p className="text-red-500 mt-3 sm:mt-0 font-mono">
+								Failed to send message.
+							</p>
+						)}
+					</div>
+				</form>
+			</div>
+		</section>
+	);
+};
+
+const Footer: React.FC = () => (
+	<footer className="bg-gray-900 border-t border-gray-800 py-6">
+		<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+			<p>
+				&copy; {new Date().getFullYear()} {userProfile.name}. All systems
+				nominal.
+			</p>
+			<p className="mt-1 font-mono text-xs">
+				Built with React & Tailwind CSS. CLI-inspired.
+			</p>
+		</div>
+	</footer>
+);
+
+const App: React.FC = () => {
+	const [currentPage, setCurrentPage] = useState<PageKey>("home");
+	const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+
+	const handleSelectPost = (post: Post) => {
+		setSelectedPost(post);
+		setCurrentPage("blog");
+	};
+
+	const handleSetCurrentPage = (page: PageKey) => {
+		setCurrentPage(page);
+		if (page !== "blog") {
+			setSelectedPost(null);
+		}
+	};
+
+	const PageContentComponent = useMemo(() => {
+		if (currentPage === "blog" && selectedPost) {
+			return (
+				<BlogPostDetail
+					post={selectedPost}
+					onBack={() => setSelectedPost(null)}
+				/>
+			);
+		}
+
+		{
+		}
+		switch (currentPage) {
+			case "home":
+				return (
+					<>
+						<Hero onProjectClick={() => handleSetCurrentPage("projects")} />
+						<SkillsSection />
+					</>
+				);
+			case "projects":
+				return <ProjectsList />;
+			case "blog":
+				// FIX: Renders the blog list if no specific post is selected
+				return <BlogSection onSelectPost={handleSelectPost} />;
+			case "contact":
+				return <ContactSection />;
+			default:
+				// Fallback case (should ideally be unreachable now)
+				return <Hero onProjectClick={() => handleSetCurrentPage("projects")} />;
+		}
+	}, [currentPage, selectedPost]);
+
+	return (
+		<div className="font-sans antialiased text-gray-300 min-h-screen bg-gray-950">
+			<Header currentPage={currentPage} setCurrentPage={handleSetCurrentPage} />
+			{/* padding-top: 80px offset for fixed header */}
+			<main className="bg-gray-950 pt-[80px] min-h-screen">
+				{PageContentComponent}
+			</main>
+			<Footer />
+		</div>
+	);
+};
+
+export default App;
