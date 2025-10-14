@@ -14,6 +14,8 @@ import {
 	Github,
 	Calendar,
 	ChevronLeft,
+	Menu,
+	X,
 } from "lucide-react";
 import { Post, PostMetadata } from "@/utils/blog-types";
 import blogPostsMetadata from "@/data/blog-metadata";
@@ -22,13 +24,13 @@ const userProfile = {
 	name: "Muhammad Khubaib",
 	title: "Full Stack Developer & AI Enthusiast",
 	bio: "Crafting robust and scalable software solutions with a focus on modern web technologies and machine learning integration. I thrive on turning complex problems into elegant, high-performance applications.",
-	email: "khubaibgullo377@gmail.com",
+	email: "gullokhubaib@gmail.com",
 	linkedin: "https://www.linkedin.com/in/khubaibgullo",
 	github: "https://github.com/khubaib-gullo/khubaib-gullo",
 };
 
 const skills = [
-	{ name: "React / Next.js", icon: "react", level: "Expert" },
+	{ name: "React.js / Next.js", icon: "react", level: "Expert" },
 	{ name: "Node.js / Express", icon: "node", level: "Expert" },
 	{ name: "TypeScript", icon: "ts", level: "Advanced" },
 	{ name: "Python / Django", icon: "python", level: "Advanced" },
@@ -116,6 +118,15 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+	const handleNavigation = (key: PageKey) => {
+		setCurrentPage(key);
+		setIsMobileMenuOpen(false);
+	};
+
+	const MobileIcon = isMobileMenuOpen ? X : Menu;
+
 	const navItems = [
 		{ name: "Home", key: "home", icon: Home },
 		{ name: "Projects", key: "projects", icon: Code },
@@ -126,7 +137,10 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
 	return (
 		<header className="fixed top-0 left-0 w-full z-10 bg-gray-900/90 backdrop-blur-sm border-b border-gray-800">
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-				<div className="flex items-center space-x-2 text-xl font-mono text-green-400 tracking-wider">
+				<div
+					onClick={() => handleNavigation("home" as PageKey)}
+					className="flex items-center space-x-2 text-xl font-mono text-green-400 tracking-wider"
+				>
 					<Terminal className="text-green-500" size={24} />
 					<span>{userProfile.name}</span>
 				</div>
@@ -134,7 +148,8 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
 					{navItems.map((item) => (
 						<GlowingButton
 							key={item.key}
-							onClick={() => setCurrentPage(item.key as PageKey)}
+							// onClick={() => setCurrentPage(item.key as PageKey)}
+							onClick={() => handleNavigation(item.key as PageKey)}
 							active={currentPage === item.key}
 							icon={item.icon}
 							className="hidden sm:flex"
@@ -144,8 +159,33 @@ const Header: React.FC<HeaderProps> = ({ currentPage, setCurrentPage }) => {
 					))}
 					<div className="sm:hidden">
 						{/* Simple mobile menu button for small screens */}
-						<GlowingButton icon={Rss}>Menu</GlowingButton>
+						{/* <GlowingButton icon={Rss}>Menu</GlowingButton> */}
+						<GlowingButton
+							icon={MobileIcon}
+							onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+						>
+							{isMobileMenuOpen ? "Close" : "Menu"}
+						</GlowingButton>
 					</div>
+
+					{isMobileMenuOpen && (
+						<div className="sm:hidden absolute top-full left-0 w-full bg-gray-900 border-t border-gray-800 shadow-lg z-10">
+							{navItems.map((item) => (
+								<div
+									key={item.key}
+									className="px-4 py-3 border-b border-gray-800 last:border-b-0"
+								>
+									<button
+										className="w-full text-left flex items-center space-x-3 text-lg text-white hover:text-green-400 transition duration-150"
+										onClick={() => handleNavigation(item.key as PageKey)}
+									>
+										<item.icon size={20} className="text-green-500" />
+										<span>{item.name}</span>
+									</button>
+								</div>
+							))}
+						</div>
+					)}
 				</nav>
 			</div>
 		</header>
@@ -159,14 +199,14 @@ interface HeroProps {
 const Hero: React.FC<HeroProps> = ({ onProjectClick }) => (
 	<section className="min-h-screen pt-28 pb-12 flex flex-col items-center justify-center text-center px-4">
 		<div className="max-w-4xl w-full">
-			<p className="text-sm font-mono text-green-400 mb-2 animate-pulse">
-				{"> Initializing profile_data..."}
+			<h3 className="text-4xl font-mono text-green-400 mb-2 animate-pulse">
+				{"> Hello..."}
 				<span className="blink-cursor">_</span>
-			</p>
+			</h3>
 			<h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-4 leading-tight">
-				Hello, I&apos;m
+				I&apos;m
 				<span className="text-green-400 transition duration-500 hover:text-green-300">
-					{userProfile.name}
+					{" " + userProfile.name}
 				</span>
 			</h1>
 			<h2 className="text-2xl sm:text-3xl font-light text-gray-300 mb-6">
@@ -212,17 +252,19 @@ const SkillsSection: React.FC = () => (
 	<section className="py-16 px-4 bg-gray-950 border-t border-gray-800">
 		<div className="max-w-7xl mx-auto">
 			<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1"></h3>
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 				{skills.map((skill, index) => (
 					<div
 						key={index}
 						className="p-5 bg-gray-900 rounded-xl border border-gray-800 hover:border-green-600 transition duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-green-900/50"
 					>
-						<div className="flex items-center space-x-3 mb-2">
+						<div className="flex items-center space-x-3 mb-2 sm:text-sm">
 							<span className="text-green-400 text-2xl">
 								<Code size={24} />
 							</span>
-							<h4 className="text-xl font-semibold text-white">{skill.name}</h4>
+							<h4 className="text-lg font-semibold text-white ">
+								{skill.name}
+							</h4>
 						</div>
 						<p className="text-sm text-gray-500 uppercase tracking-widest">
 							{skill.level}
@@ -392,7 +434,7 @@ const ContactSection: React.FC = () => {
 						className="text-gray-400 hover:text-green-400 transition"
 						aria-label="Email"
 					>
-						khubaibgullo377@gmail.com
+						gullokhubaib@gmail.com
 					</a>
 					<a
 						href={userProfile.linkedin}
@@ -410,7 +452,7 @@ const ContactSection: React.FC = () => {
 						className="text-gray-400 hover:text-green-400 transition "
 						aria-label="GitHub"
 					>
-						<GitBranch size={32} />
+						<Github size={32} />
 					</a>
 				</div>
 
