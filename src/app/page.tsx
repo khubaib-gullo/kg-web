@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 
 import {
@@ -42,25 +42,41 @@ const skills = [
 
 const projects = [
 	{
-		title: "Quantum Ledger DApp",
+		title: "Real-time Chat Application",
 		description:
-			"A decentralized application for immutable asset tracking built on a custom blockchain fork. Features real-time data sync and multi-sig authentication.",
-		technologies: ["Next.js", "Solidity", "TypeScript", "Web3.js"],
-		link: "https://github.com/alexvesper/quantum-ledger",
+			"Built a realtime web application for messaging text and media using MERN Stack ",
+		technologies: [
+			"Next.js",
+			"TypeScript",
+			"Node.js",
+			"Express.js",
+			"MongoDB",
+			"Socket.io",
+			"Zustand",
+			"Tailwind CSS",
+		],
+		link: "https://github.com/khubaib-gullo/realtime_chat_app",
 	},
 	{
-		title: "Neural Style Transfer API",
+		title: "Admit Ease",
 		description:
-			"A Python-based REST API utilizing TensorFlow for real-time artistic style transfer on user-uploaded images.",
-		technologies: ["Python", "TensorFlow", "Flask", "Docker"],
-		link: "https://github.com/alexvesper/neural-transfer-api",
+			"A powerful web app using advanced OCR and AI for seamless form completion. Upload any admission document picture; the system intelligently reads and maps key data to the correct form fields. Get accurate, pre-filled forms in seconds.",
+		technologies: ["React", "Typescript", "Gemini Api", "FireBase"],
+		link: "https://github.com/khubaib-gullo/Admit_Ease",
 	},
 	{
-		title: "Personal Portfolio (V3)",
+		title: "Smart Bite",
+		description: "Food Ordering app in flutter ",
+		technologies: ["Flutter", "Dart", "Firebase"],
+		link: "https://github.com/khubaib-gullo/smart_bite",
+	},
+
+	{
+		title: "Personal Portfolio",
 		description:
-			"The third iteration of my personal site, designed with a custom CLI-inspired theme for maximum developer appeal and minimal loading time.",
-		technologies: ["React", "Tailwind CSS", "Vite", "JS"],
-		link: "https://github.com/alexvesper/personal-portfolio-v3",
+			"My personal site, designed with a custom CLI-inspired theme for maximum developer appeal and minimal loading time.",
+		technologies: ["React", "TypeScript", "Tailwind CSS", "Vite", "JS"],
+		link: "https://github.com/khubaib-gullo/k-gullo",
 	},
 ];
 
@@ -356,18 +372,46 @@ const BlogSection: React.FC<{ onSelectPost: (post: Post) => void }> = ({
 	</section>
 );
 
-const BlogPostDetail: React.FC<{ post: Post; onBack: () => void }> = ({
-	post,
-	onBack,
-}) => {
-	const MDXContent = useMemo(() => {
-		return dynamic(() => import(`@/app/blog/${post.slug}.mdx`), {
-			loading: () => (
-				<p className="text-green-500 font-mono">Loading post content...</p>
-			),
-		});
-	}, [post.slug]);
+interface BlogPostDetailProps {
+	post: Post;
+	onBack: () => void;
+}
 
+const BlogPostDetail: React.FC<BlogPostDetailProps> = ({ post, onBack }) => {
+	const [htmlContent, setHtmlContent] = useState<string | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		async function fetchPostHtml() {
+			setLoading(true);
+			setError(null);
+			setHtmlContent(null);
+
+			try {
+				const response = await fetch(`/blog-html/${post.slug}.html`);
+
+				if (!response.ok) {
+					if (response.status === 404) {
+						throw new Error(`Blog post "${post.slug}.html" not found.`);
+					}
+					throw new Error(`Failed to fetch content: ${response.statusText}`);
+				}
+
+				const text = await response.text();
+				setHtmlContent(text);
+			} catch (err: any) {
+				console.error("Error fetching blog post HTML:", err);
+				setError(err.message || "An unknown error occurred.");
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		if (post?.slug) {
+			fetchPostHtml();
+		}
+	}, [post.slug]);
 	return (
 		<section className="py-16 px-4">
 			<div className="max-w-3xl mx-auto">
@@ -385,8 +429,15 @@ const BlogPostDetail: React.FC<{ post: Post; onBack: () => void }> = ({
 					</div>
 
 					<div className="prose prose-invert max-w-none">
-						{/* 2. Render the dynamically loaded MDX component */}
-						<MDXContent />
+						{loading && (
+							<p className="text-green-500 font-mono">
+								Loading post content...
+							</p>
+						)}
+						{error && <p className="text-red-500 font-mono">Error: {error}</p>}
+						{htmlContent && (
+							<div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+						)}
 					</div>
 				</article>
 			</div>

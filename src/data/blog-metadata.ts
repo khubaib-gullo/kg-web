@@ -3,19 +3,20 @@ import { PostMetadata } from "@/utils/blog-types";
 const blogPostsMetadata: PostMetadata[] = [
 	{
 		id: 1,
-		title: "The Future of Serverless Computing",
-		date: "Oct 1, 2025",
+		title: "Why React is popular in Front-End",
+		date: "Sep, 2024",
 		excerpt:
-			"Exploring the evolution of FaaS platforms and their impact on modern application architecture.",
-		slug: "the-future-of-serverless-computing",
+			"React's dominance is built on performance, component architecture, and an unmatched community.",
+		slug: "why-react-popular",
 	},
+
 	{
 		id: 2,
-		title: "A Deep Dive into React Concurrent Mode",
-		date: "Sep 15, 2025",
+		title: "What actually is Coding?",
+		date: "Aug , 2024",
 		excerpt:
-			"Understanding concurrent rendering, transitions, and suspense in the new React paradigm.",
-		slug: "react-concurrent-mode",
+			"It's not just about typing syntax; it's about problem-solving and system design.",
+		slug: "reality-of-coding",
 	},
 ];
 
