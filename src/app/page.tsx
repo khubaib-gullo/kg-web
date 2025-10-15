@@ -400,9 +400,14 @@ const BlogPostDetail: React.FC<BlogPostDetailProps> = ({ post, onBack }) => {
 
 				const text = await response.text();
 				setHtmlContent(text);
-			} catch (err: any) {
+			} catch (err: unknown) {
 				console.error("Error fetching blog post HTML:", err);
-				setError(err.message || "An unknown error occurred.");
+
+				if (err instanceof Error) {
+					setError(err.message);
+				} else {
+					setError("An unknown error occurred.");
+				}
 			} finally {
 				setLoading(false);
 			}
