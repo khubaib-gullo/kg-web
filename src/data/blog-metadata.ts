@@ -3,11 +3,14 @@ import { PostMetadata } from "@/utils/blog-types";
 const blogPostsMetadata: PostMetadata[] = [
 	{
 		id: 1,
-		title: "Why React is popular in Front-End",
-		date: "Sep, 2024",
-		excerpt:
-			"React's dominance is built on performance, component architecture, and an unmatched community.",
-		slug: "why-react-popular",
+		title: "The Rise of Next.js",
+		date: "Oct, 2024",
+		excerpt: `React has long reigned as the undisputed king of front-end development,
+		giving developers a powerful, component-based library for building complex
+		user interfaces. But in the modern web era, a library alone isn't enough.
+		Applications need to be lightning-fast, highly optimized for search engines
+		(SEO), and easy to deploy.`,
+		slug: "The-rise-of-nextjs",
 	},
 
 	{

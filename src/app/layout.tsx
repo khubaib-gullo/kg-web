@@ -25,8 +25,9 @@ export default function RootLayout({
 		<html lang="en">
 			{/* We assume 'Inter' font is loaded via global CSS or Tailwind config in a real Next.js project */}
 			<head>
-				<title>Khubaib Gullo</title>
+				<title>M. Khubaib</title>
 				<style>{globalStyles}</style>
+				<link rel="shortcut icon" href="/icon.png" />
 			</head>
 			{/* Apply base styles to body: dark background, inter font, light text */}
 			<body className="font-sans bg-gray-950 text-gray-300">
