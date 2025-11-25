@@ -16,6 +16,7 @@ import {
 	ChevronLeft,
 	Menu,
 	X,
+	MessageCircle,
 } from "lucide-react";
 import { Post, PostMetadata } from "@/utils/blog-types";
 import blogPostsMetadata from "@/data/blog-metadata";
@@ -42,43 +43,53 @@ const skills = [
 
 const projects = [
 	{
-		title: "Real-time Chat Application",
+		title: "Digital Nexus",
 		description:
-			"Built a realtime web application for messaging text and media using MERN Stack ",
+			"A software agency website emphasizing impressive visuals and advanced scroll effects (like parallax and cinematic transitions )",
 		technologies: [
 			"Next.js",
 			"TypeScript",
 			"Node.js",
-			"Express.js",
 			"MongoDB",
-			"Socket.io",
-			"Zustand",
 			"Tailwind CSS",
 		],
-		link: "https://github.com/khubaib-gullo/realtime_chat_app",
+		link: "https://digital-nexus-two.vercel.app/",
+		imageUrl: "images/Screenshot (202).png",
 	},
 	{
-		title: "Admit Ease",
-		description:
-			"A powerful web app using advanced OCR and AI for seamless form completion. Upload any admission document picture; the system intelligently reads and maps key data to the correct form fields. Get accurate, pre-filled forms in seconds.",
-		technologies: ["React", "Typescript", "Gemini Api", "FireBase"],
-		link: "https://github.com/khubaib-gullo/Admit_Ease",
-	},
-	{
-		title: "Smart Bite",
-		description: "Food Ordering app in flutter ",
-		technologies: ["Flutter", "Dart", "Firebase"],
-		link: "https://github.com/khubaib-gullo/smart_bite",
+		title: "Eflyer.",
+		description: "E-commerce website ",
+		technologies: [
+			"React",
+			"Typescript",
+			"Tailwind",
+			"Nodejs",
+			"Express",
+			"MongoDB",
+		],
+		link: "https://eflyer-jade.vercel.app/",
+		imageUrl: "images/Screenshot (201).png",
 	},
 
 	{
-		title: "Personal Portfolio",
-		description:
-			"My personal site, designed with a custom CLI-inspired theme for maximum developer appeal and minimal loading time.",
+		title: "Alex Morgan",
+		description: "A personal portfolio website of a Developer & UI Designer",
 		technologies: ["React", "TypeScript", "Tailwind CSS", "Vite", "JS"],
-		link: "https://github.com/khubaib-gullo/k-gullo",
+		link: "https://alex-portfolio-five-neon.vercel.app/",
+		imageUrl: "images/Screenshot (203).png",
+	},
+	{
+		title: "STRIDE.STYLE",
+		description:
+			"Shoes website, designed with a custom theme.Appeal and minimal loading time.",
+		technologies: ["React", "TypeScript", "Tailwind CSS", "Vite", "JS"],
+		link: "https://stride-style-three.vercel.app/",
+		imageUrl: "images/Screenshot (204).png",
 	},
 ];
+
+const WHATSAPP_NUMBER = "+923416429260"; // REPLACE with your actual number (including country code, no +, no spaces)
+const DEFAULT_MESSAGE = "Hello! I saw your projects and would like to chat."; // The pre-filled message
 
 const blogPosts = blogPostsMetadata;
 
@@ -292,47 +303,188 @@ const SkillsSection: React.FC = () => (
 	</section>
 );
 
+// const ProjectsList: React.FC = () => (
+// 	<section className="py-16 px-4">
+// 		<div className="max-w-7xl mx-auto">
+// 			<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1"></h3>
+// 			<div className="space-y-12">
+// 				{projects.map((project, index) => (
+// 					<div
+// 						key={index}
+// 						className="bg-gray-900 p-6 sm:p-8 rounded-xl border border-gray-800 flex flex-col md:flex-row shadow-xl"
+// 					>
+// 						<div className="md:w-3/4">
+// 							<h4 className="text-2xl font-bold text-green-400 mb-2 flex items-center">
+// 								<GitBranch className="mr-3" size={24} />
+// 								{project.title}
+// 							</h4>
+// 							<p className="text-gray-400 mb-4">{project.description}</p>
+// 							<div className="flex flex-wrap gap-2 mb-4">
+// 								{project.technologies.map((tech, i) => (
+// 									<span
+// 										key={i}
+// 										className="px-3 py-1 text-xs font-mono bg-gray-800 text-cyan-400 rounded-full border border-cyan-500/30"
+// 									>
+// 										{tech}
+// 									</span>
+// 								))}
+// 							</div>
+// 						</div>
+// 						<div className="md:w-1/4 flex md:flex-col justify-end items-start md:items-end mt-4 md:mt-0">
+// 							<a
+// 								href={project.link}
+// 								target="_blank"
+// 								rel="noopener noreferrer"
+// 								className="self-start md:self-end"
+// 							>
+// 								<GlowingButton
+// 									icon={ExternalLink}
+// 									className="text-sm px-4 py-2"
+// 								>
+// 									View Source
+// 								</GlowingButton>
+// 							</a>
+// 						</div>
+// 					</div>
+// 				))}
+// 			</div>
+// 		</div>
+// 	</section>
+// );
+
+const WhatsAppButton = () => {
+	// Construct the WhatsApp URL
+	const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+		DEFAULT_MESSAGE
+	)}`;
+
+	return (
+		<a
+			href={whatsappUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			title="Chat with us on WhatsApp"
+			// Fixed position, bottom-right corner, always visible (z-50)
+			className="fixed bottom-6 right-6 z-50 transition-all duration-300"
+		>
+			<div
+				className="
+                    bg-green-500 text-white p-4 rounded-full shadow-2xl 
+                    hover:bg-green-600 hover:scale-110 
+                    transform transition-transform duration-300 ease-in-out
+                    border-4 border-white/50 cursor-pointer
+                    relative
+                    group
+                "
+			>
+				{/* WhatsApp Icon */}
+				<MessageCircle size={32} />
+
+				{/* Tooltip/Label */}
+				<span
+					className="
+                    absolute right-full top-1/2 transform -translate-y-1/2 
+                    mr-3 p-2 bg-gray-800 text-white text-sm rounded-lg 
+                    opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                    whitespace-nowrap pointer-events-none
+                "
+				>
+					Chat on WhatsApp
+				</span>
+			</div>
+		</a>
+	);
+};
+
 const ProjectsList: React.FC = () => (
 	<section className="py-16 px-4">
 		<div className="max-w-7xl mx-auto">
-			<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1"></h3>
-			<div className="space-y-12">
+			<h3 className="text-3xl font-bold text-white mb-10 text-center border-b-2 border-green-500/50 inline-block pb-1">
+				My Projects
+			</h3>
+
+			{/* 1. Use grid for layout
+                2. Use grid-cols-1 for mobile (default)
+                3. Use lg:grid-cols-2 for desktop (large screens and up)
+                4. Use gap-8 or gap-12 for spacing between cards
+            */}
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 				{projects.map((project, index) => (
 					<div
 						key={index}
-						className="bg-gray-900 p-6 sm:p-8 rounded-xl border border-gray-800 flex flex-col md:flex-row shadow-xl"
+						// The card itself: full height, full width of its grid cell
+						className="bg-gray-900 p-6 sm:p-8 rounded-xl border border-gray-800 flex flex-col shadow-xl"
 					>
-						<div className="md:w-3/4">
-							<h4 className="text-2xl font-bold text-green-400 mb-2 flex items-center">
-								<GitBranch className="mr-3" size={24} />
-								{project.title}
-							</h4>
-							<p className="text-gray-400 mb-4">{project.description}</p>
-							<div className="flex flex-wrap gap-2 mb-4">
-								{project.technologies.map((tech, i) => (
-									<span
-										key={i}
-										className="px-3 py-1 text-xs font-mono bg-gray-800 text-cyan-400 rounded-full border border-cyan-500/30"
-									>
-										{tech}
-									</span>
-								))}
-							</div>
-						</div>
-						<div className="md:w-1/4 flex md:flex-col justify-end items-start md:items-end mt-4 md:mt-0">
-							<a
-								href={project.link}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="self-start md:self-end"
-							>
-								<GlowingButton
-									icon={ExternalLink}
-									className="text-sm px-4 py-2"
-								>
-									View Source
-								</GlowingButton>
+						{/* Image: Full width of the card. 
+                            Removed the lg:w-1/3 class as the entire card is now the project item.
+                        */}
+						<div className="w-full overflow-hidden rounded-lg shadow-2xl mb-6 transition-transform duration-500 hover:scale-[1.02]">
+							{/* NOTE: I assumed 'project.link' is the live URL, based on your previous button */}
+							<a href={project.link} target="_blank" rel="noopener noreferrer">
+								<img
+									src={project.imageUrl}
+									alt={`Screenshot of ${project.title} landing page`}
+									// Set a maximum height to keep cards roughly the same size, adjust as needed
+									className="w-full h-56 md:h-72 object-cover border border-gray-700/50"
+								/>
 							</a>
+						</div>
+
+						{/* Project Details (Now occupying the bottom part of the card) */}
+						<div className="flex flex-col justify-between flex-grow">
+							<div>
+								<h4 className="text-2xl font-bold text-green-400 mb-2 flex items-center">
+									{/* NOTE: Assuming GitBranch is imported */}
+									<GitBranch className="mr-3" size={24} />
+									{project.title}
+								</h4>
+								<p className="text-gray-400 mb-4">{project.description}</p>
+								<div className="flex flex-wrap gap-2 mb-6">
+									{project.technologies.map((tech, i) => (
+										<span
+											key={i}
+											className="px-3 py-1 text-xs font-mono bg-gray-800 text-cyan-400 rounded-full border border-cyan-500/30"
+										>
+											{tech}
+										</span>
+									))}
+								</div>
+							</div>
+
+							{/* Action Buttons */}
+							<div className="flex flex-col sm:flex-row gap-3 mt-auto pt-4">
+								{" "}
+								{/* mt-auto pushes buttons to the bottom */}
+								{/* Link to Live Project */}
+								<a
+									href={project.link}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{/* NOTE: Assuming GlowingButton and ExternalLink are imported */}
+									<GlowingButton
+										icon={ExternalLink}
+										className="text-sm px-4 py-2 bg-green-600 hover:bg-green-700 w-full sm:w-auto"
+									>
+										View Live
+									</GlowingButton>
+								</a>
+								{/* Link to Source Code (If you have it, add it back here) */}
+								{/*
+                                <a
+                                    href={project.sourceUrl} // Use the actual source code URL property
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <GlowingButton
+                                        icon={GitBranch}
+                                        className="text-sm px-4 py-2 w-full sm:w-auto"
+                                    >
+                                        View Source
+                                    </GlowingButton>
+                                </a>
+                                */}
+							</div>
 						</div>
 					</div>
 				))}
@@ -642,7 +794,7 @@ const App: React.FC = () => {
 				return (
 					<>
 						<Hero onProjectClick={() => handleSetCurrentPage("projects")} />
-						<SkillsSection />
+						<ProjectsList />
 					</>
 				);
 			case "projects":
@@ -665,6 +817,7 @@ const App: React.FC = () => {
 			<main className="bg-gray-950 pt-[80px] min-h-screen">
 				{PageContentComponent}
 			</main>
+			<WhatsAppButton />
 			<Footer />
 		</div>
 	);
