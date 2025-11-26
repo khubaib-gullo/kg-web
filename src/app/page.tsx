@@ -84,7 +84,7 @@ const projects = [
 			"Shoes website, designed with a custom theme.Appeal and minimal loading time.",
 		technologies: ["React", "TypeScript", "Tailwind CSS", "Vite", "JS"],
 		link: "https://stride-style-three.vercel.app/",
-		imageUrl: "images/Screenshot (204).png",
+		imageUrl: "images/Screenshot (206).png",
 	},
 ];
 
