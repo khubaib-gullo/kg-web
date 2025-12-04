@@ -88,7 +88,7 @@ const projects = [
 	},
 ];
 
-const WHATSAPP_NUMBER = "+923416429260"; // REPLACE with your actual number (including country code, no +, no spaces)
+const WHATSAPP_NUMBER = "+923249611363"; // REPLACE with your actual number (including country code, no +, no spaces)
 const DEFAULT_MESSAGE = "Hello! I saw your projects and would like to chat."; // The pre-filled message
 
 const blogPosts = blogPostsMetadata;
